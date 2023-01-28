@@ -2,6 +2,17 @@ version: 2.1
 
 defaults: &defaults
 
+aliases:
+  - &l3build
+    run:
+      name: l3build install
+      command: |
+        if [ -z ${SAVED_PATH+x} ]; then :; else
+          export PATH=$SAVED_PATH
+        fi
+        cd spectralsequences
+        l3build install
+
 jobs:
   test-examples:
     parameters:
@@ -14,15 +25,8 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: l3build install
-          command: |
-            if [ -z ${SAVED_PATH+x} ]; then :; else
-              export PATH=$SAVED_PATH
-            fi
-            cd spectralsequences
-            l3build install
-      
+      - *l3build
+
       - run:
           name: test examples
           command: |
@@ -44,15 +48,7 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: l3build install
-          command: |
-            if [ -z ${SAVED_PATH+x} ]; then :; else
-              export PATH=$SAVED_PATH
-            fi
-            cd spectralsequences
-            l3build install
-
+      - *l3build
       - run:
           name: build manual
           command: |
@@ -70,7 +66,7 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: << parameters.image >>
-    
+
     steps:
       - checkout
       - run:
@@ -86,7 +82,19 @@ jobs:
       - store_artifacts:
           path : /root/repo/build/test
 
-  
+  build-dist:
+    working_directory: ~/repo
+    docker:
+      - image: texlive/texlive:latest
+
+    steps:
+      - checkout
+      - *l3build
+      - run:
+          name: blah
+          command: |
+            echo "hi"
+
 
 
 workflows:
