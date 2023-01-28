@@ -19,6 +19,10 @@ jobs:
       image:
         description: Which docker image should we use?
         type: string
+      year:
+        description: Ignored
+        type: integer
+        default: 0
     working_directory: ~/repo
     docker:
       - image: << parameters.image >>
@@ -42,6 +46,10 @@ jobs:
       image:
         description: Which docker image should we use?
         type: string
+      year:
+        description: Ignored
+        type: integer
+        default: 0
     working_directory: ~/repo
     docker:
       - image: << parameters.image >>
@@ -63,6 +71,10 @@ jobs:
       image:
         description: Which docker image should we use?
         type: string
+      year:
+        description: Ignored
+        type: integer
+        default: 0
     working_directory: ~/repo
     docker:
       - image: << parameters.image >>
