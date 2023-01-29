@@ -111,7 +111,11 @@ jobs:
             ./compile_examples.sh
             cp examples_output/*.pdf examples
             rm -rf examples_output
-            cd ..
+      - run:
+          name: zip files
+          command: |
+            apt update
+            apt install zip
             find spectralsequences -regextype egrep -regex ".*\.sty|.*\.tex|.*\.md|.*\.pdf" | zip spectralsequences.zip --quiet -@
       - store_artifacts:
           path : /root/repo/spectralsequences.zip
