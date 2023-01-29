@@ -38,7 +38,7 @@ jobs:
             ./compile_examples.sh
 
       - store_artifacts:
-          path: /root/repo/examples_output
+          path: /root/repo/spectralsequences/examples_output
 
 
   build-manual:
@@ -92,7 +92,7 @@ jobs:
             l3build check -e pdftex test parsers range-check styles \
               || (cat build/test/*.diff && false)
       - store_artifacts:
-          path : /root/repo/build/test
+          path : /root/repo/spectralsequences/build/test
 
   build-dist:
     working_directory: ~/repo
@@ -103,10 +103,18 @@ jobs:
       - checkout
       - *l3build
       - run:
-          name: blah
+          name: make_files
           command: |
             cd spectralsequences/manual
-            pdflatex spectralsequencesmanual.tex
+            latexmk -pdf spectralsequencesmanual.tex
+            cd ..
+            ./compile_examples.sh
+            cp examples_output/*.pdf examples
+            rm -rf examples_output
+            cd ..
+            find spectralsequences -regextype egrep -regex ".*\.sty|.*\.tex|.*\.md|.*\.pdf" | zip spectralsequences.zip --quiet -@
+      - store_artifacts:
+          path : /root/repo/spectralsequences.zip
 
 
 
